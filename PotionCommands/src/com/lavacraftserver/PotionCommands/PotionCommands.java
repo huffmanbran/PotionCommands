@@ -9,24 +9,30 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class PotionCommands extends JavaPlugin {
+public class PotionCommands extends JavaPlugin 
+{
 	
 	//public RemoveEffect RemoveEffect = new RemoveEffect(this);
 	
 	@Override
-	public void onEnable() {
+	public void onEnable() 
+	{
 		getLogger().info("PotionCommands successfully enabled!");
 		getConfig().options().copyDefaults(true);
 		saveConfig();
+		getCommand("rpotion").setExecutor(new RemoveEffect(this));
 	}
 
 	@Override
-	public void onDisable() {
-		getLogger().info("PotionCommands disabled.");
+	public void onDisable() 
+	{
+		getLogger().info("PotionCommands disabled");
 	}
 	
-	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-		int blindnessd = getConfig().getInt("blindness-duration");
+	@SuppressWarnings("unused")
+	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) 
+	{
+		int blindnessd = getConfig().getInt("blindness-duration"); //Broil
 		int confusiond = getConfig().getInt("confusion-duration");
 		int dmgresistd = getConfig().getInt("damage-resistance-duration");
 		int fastdiggingd = getConfig().getInt("fast-digging-duration");
@@ -43,177 +49,232 @@ public class PotionCommands extends JavaPlugin {
 		int wbd = getConfig().getInt("water-breathing-duration");
 		int weaknessd = getConfig().getInt("weakness-duration");
 		int scared = getConfig().getInt("freak-out-duration");
-	Boolean auth = false;
-	if (sender.hasPermission("PotionCommands.use") || sender.isOp()) {
-		auth = true;				
-	}
-	if (commandLabel.equalsIgnoreCase("potion")) {
-		if (!(sender instanceof Player)) {
-			sender.sendMessage("[PotionCommands] This command can only be run by a player!");
-			return true;
-		} else {
-			final Player player = (Player) sender;
-			if (!(auth == true)) {
-				sender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
+		Boolean auth = false;
+		if (sender.hasPermission("PotionCommands.use") || sender.isOp()) 
+		{
+			auth = true;				
+		}
+		if (commandLabel.equalsIgnoreCase("potion")) 
+		{
+			if (!(true)) 
+			{
+				//Not necessary
+				sender.sendMessage("[PotionCommands] This command can only be run by a player!");
+				
 				return true;
-			}
-			if (args.length > 3 && auth == true) {
-				sender.sendMessage(ChatColor.RED + "Too many arguments! /potion <effect> <player> [duration]");
-				return true;
-			}
-				//catch (Exception e) {
-					//sender.sendMessage(ChatColor.RED + "Too few arguments! /potion <effect> <player> [duration]");
-					//return true;
+			} 
+	        else 
+			{
+				final CommandSender player = sender;
+				if (!(auth == true)) 
+				{
+					sender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
+					return true;
+				}
+				if (args.length > 3 && auth == true) 
+				{
+					sender.sendMessage(ChatColor.RED + "Too many arguments! /potion <effect> <player> [duration]");
+					return true;
+				}
+					//catch (Exception e) 
+					//{
+						//sender.sendMessage(ChatColor.RED + "Too few arguments! /potion <effect> <player> [duration]");
+						//return true;
+					//}
 				//}
-			//}
-			if (args.length == 3 && auth == true) {
-				try {
-					blindnessd = Integer.parseInt(args[2]);
-					confusiond = Integer.parseInt(args[2]);
-					dmgresistd = Integer.parseInt(args[2]);
-					fastdiggingd = Integer.parseInt(args[2]);
-					fireresistanced = Integer.parseInt(args[2]);
-					harmd = Integer.parseInt(args[2]);
-					heald = Integer.parseInt(args[2]);
-					hungerd = Integer.parseInt(args[2]);
-					jumpd = Integer.parseInt(args[2]);
-					poisond = Integer.parseInt(args[2]);
-					regenerationd = Integer.parseInt(args[2]);
-					slowd = Integer.parseInt(args[2]);
-					speedd = Integer.parseInt(args[2]);
-					increasedmgd = Integer.parseInt(args[2]);
-					wbd = Integer.parseInt(args[2]);
-					scared = Integer.parseInt(args[2]);
+				if (args.length == 3 && auth == true) 
+				{
+					try 
+					{
+						blindnessd = Integer.parseInt(args[2]);
+						confusiond = Integer.parseInt(args[2]);
+						dmgresistd = Integer.parseInt(args[2]);
+						fastdiggingd = Integer.parseInt(args[2]);
+						fireresistanced = Integer.parseInt(args[2]);
+						harmd = Integer.parseInt(args[2]);
+						heald = Integer.parseInt(args[2]);
+						hungerd = Integer.parseInt(args[2]);
+						jumpd = Integer.parseInt(args[2]);
+						poisond = Integer.parseInt(args[2]);
+						regenerationd = Integer.parseInt(args[2]);
+						slowd = Integer.parseInt(args[2]);
+						speedd = Integer.parseInt(args[2]);
+						increasedmgd = Integer.parseInt(args[2]);
+						wbd = Integer.parseInt(args[2]);
+						scared = Integer.parseInt(args[2]);
 					}
-					catch (Exception e) {
+					catch (Exception e) 
+					{
 						player.sendMessage(ChatColor.RED + "Duration must be an integer!");
 						return true;
 					}
+				}
+				
+				if (args[0].equalsIgnoreCase("effects") && (player.hasPermission("PotionCommands.effects") || player.isOp())) 
+				{
+					sender.sendMessage(ChatColor.AQUA + "Blindness, confusion, damage resistance, fast digging, fire resistance, harm, heal, hunger, jump, poison, regeneration, slowness, swiftness, strength, water breathing, weakness, freakout/scare, flicker");
+					return true;
+				}
+				
+				//Test command?
+				if (false &&(args[0].equalsIgnoreCase("b") || args[0].equalsIgnoreCase("blindness")) && auth == true && (player.hasPermission("PotionCommands.remove.blindness") || player.isOp())) 
+				{
+					Player target = Bukkit.getPlayer(args[1]);
+					target.removePotionEffect(PotionEffectType.BLINDNESS);
+					target.sendMessage("HI");
+					return true;
+				}
+				
+				if ((args[0].equalsIgnoreCase("blind") || args[0].equalsIgnoreCase("blindness")) && auth == true && (player.hasPermission("PotionCommands.effect.blindness") || player.isOp())) 
+				{
+					Player target = getServer().getPlayer(args[1]);
+					target.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, blindnessd * 20, 1));
+					sender.sendMessage(ChatColor.AQUA + "Applied blindness to " + target.getName() + " for " + blindnessd + " seconds!");
+					return true;
+				}
+				
+				if ((args[0].equalsIgnoreCase("confuse") || args[0].equalsIgnoreCase("confusion") || args[0].equalsIgnoreCase("nausea")) && auth == true && (player.hasPermission("PotionCommands.effect.confusion") || player.isOp())) 
+				{
+					Player target = getServer().getPlayer(args[1]);
+					target.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, confusiond * 20, 1));
+					sender.sendMessage(ChatColor.AQUA + "Applied confusion to " + target.getName() + " for " + confusiond + " seconds!");
+					return true;
+				}
+				
+				if (args[0].equalsIgnoreCase("dmgresist") || args[0].equalsIgnoreCase("dr") && auth == true && (player.hasPermission("PotionCommands.effect.damageresistance") || player.isOp())) 
+				{
+					Player target = getServer().getPlayer(args[1]);
+					target.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, dmgresistd * 20, 1));
+					sender.sendMessage(ChatColor.AQUA + "Applied damage resistance to " + target.getName() + " for " + dmgresistd + " seconds!");
+					return true;
+				}
+				
+				if (args[0].equalsIgnoreCase("fastdig") || args[0].equalsIgnoreCase("digspeed") || args[0].equalsIgnoreCase("dig") || args[0].equalsIgnoreCase("haste") && auth == true && (player.hasPermission("PotionCommands.effect.haste") || player.isOp())) 
+				{
+					Player target = getServer().getPlayer(args[1]);
+					target.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, fastdiggingd * 20, 1));
+					sender.sendMessage(ChatColor.AQUA + "Applied haste to " + target.getName() + " for " + fastdiggingd + " seconds!");
+					return true;
+				}
+				
+				if (args[0].equalsIgnoreCase("fireresistance") || args[0].equalsIgnoreCase("fireresist") || args[0].equalsIgnoreCase("fr") && auth == true && (player.hasPermission("PotionCommands.effect.fireresistance") || player.isOp())) 
+				{
+					Player target = getServer().getPlayer(args[1]);
+					target.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, fireresistanced * 20, 1));
+					sender.sendMessage(ChatColor.AQUA + "Applied fire resistance to " + target.getName() + " for " + fireresistanced + " seconds!");
+					return true;
+				}
+				
+				if (args[0].equalsIgnoreCase("harm") || args[0].equalsIgnoreCase("harming") && auth == true && (player.hasPermission("PotionCommands.effect.harming") || player.isOp())) 
+				{
+					Player target = getServer().getPlayer(args[1]);
+					target.addPotionEffect(new PotionEffect(PotionEffectType.HARM, harmd * 20, 1));
+					sender.sendMessage(ChatColor.AQUA + "Applied harm to " + target.getName() + " for " + harmd + " seconds!");
+					return true;
+				}	
+				
+				if (args[0].equalsIgnoreCase("heal") || args[0].equalsIgnoreCase("healing") && auth == true && (player.hasPermission("PotionCommands.effect.healing") || player.isOp())) 
+				{
+					Player target = getServer().getPlayer(args[1]);
+					target.addPotionEffect(new PotionEffect(PotionEffectType.HEAL, heald * 20, 1));
+					sender.sendMessage(ChatColor.AQUA + "Applied heal to " + target.getName() + " for " + heald + " seconds!");
+					return true;
+				}
+				
+				if (args[0].equalsIgnoreCase("hunger") && auth == true && (player.hasPermission("PotionCommands.effect.hunger") || player.isOp())) 
+				{
+					Player target = getServer().getPlayer(args[1]);
+					target.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, hungerd * 20, 1));
+					sender.sendMessage(ChatColor.AQUA + "Applied hunger to " + target.getName() + " for " + hungerd + " seconds!");
+					return true;
+				}
+				
+				if (args[0].equalsIgnoreCase("jump") || args[0].equalsIgnoreCase("highjump") || args[0].equalsIgnoreCase("jumpboost") && auth == true && (player.hasPermission("PotionCommands.effect.jumpboost") || player.isOp())) 
+				{
+					Player target = getServer().getPlayer(args[1]);
+					target.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, jumpd * 20, 1));
+					sender.sendMessage(ChatColor.AQUA + "Applied jump boost to " + target.getName() + " for " + jumpd + " seconds!");
+					return true;
+				}
+				
+				if (args[0].equalsIgnoreCase("poison") && auth == true && (player.hasPermission("PotionCommands.effect.poison") || player.isOp())) 
+				{
+					Player target = getServer().getPlayer(args[1]);
+					target.addPotionEffect(new PotionEffect(PotionEffectType.POISON, poisond * 20, 1));
+					sender.sendMessage(ChatColor.AQUA + "Applied poison to " + target.getName() + " for " + poisond + " seconds!");
+					return true;
+				}
+				
+				if (args[0].equalsIgnoreCase("regeneration") || args[0].equalsIgnoreCase("regen") && auth == true && (player.hasPermission("PotionCommands.effect.regeneration") || player.isOp())) 
+				{
+					Player target = getServer().getPlayer(args[1]);
+					target.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, regenerationd * 20, 1));
+					sender.sendMessage(ChatColor.AQUA + "Applied regeneration to " + target.getName() + " for " + regenerationd + " seconds!");
+					return true;
+				}
+				
+				if (args[0].equalsIgnoreCase("slowness") || args[0].equalsIgnoreCase("slow") && auth == true && (player.hasPermission("PotionCommands.effect.slowness") || player.isOp())) 
+				{
+					Player target = getServer().getPlayer(args[1]);
+					target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, slowd * 20, 1));
+					sender.sendMessage(ChatColor.AQUA + "Applied slowness to " + target.getName() + " for " + slowd + " seconds!");
+					return true;
+				}
+				
+				if (args[0].equalsIgnoreCase("speed") || args[0].equalsIgnoreCase("swiftness") || args[0].equalsIgnoreCase("swift") && auth == true && (player.hasPermission("PotionCommands.effect.swiftness") || player.isOp())) 
+				{
+					Player target = getServer().getPlayer(args[1]);
+					target.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, speedd * 20, 1));
+					sender.sendMessage(ChatColor.AQUA + "Applied swiftness to " + target.getName() + " for " + speedd + " seconds!");
+					return true;
+				}
+				
+				if (args[0].equalsIgnoreCase("strength") || args[0].equalsIgnoreCase("strong") && auth == true && (player.hasPermission("PotionCommands.effect.strength") || player.isOp())) 
+				{
+					Player target = getServer().getPlayer(args[1]);
+					target.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, increasedmgd * 20, 1));
+					sender.sendMessage(ChatColor.AQUA + "Applied strength to " + target.getName() + " for " + increasedmgd + " seconds!");
+					return true;
+				}
+				
+				if (args[0].equalsIgnoreCase("waterbreathing") || args[0].equalsIgnoreCase("breathing") || args[0].equalsIgnoreCase("wb") && auth == true && (player.hasPermission("PotionCommands.effect.waterbreathing") || player.isOp())) 
+				{
+					Player target = getServer().getPlayer(args[1]);
+					target.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, wbd * 20, 1));
+					sender.sendMessage(ChatColor.AQUA + "Applied water breathing to " + target.getName() + " for " + wbd + " seconds!");
+					return true;
+				}
+				
+				if (args[0].equalsIgnoreCase("weakness") || args[0].equalsIgnoreCase("weak") && auth == true && (player.hasPermission("PotionCommands.effect.weakness") || player.isOp())) 
+				{
+					Player target = getServer().getPlayer(args[1]);
+					target.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, weaknessd * 20, 1));
+					sender.sendMessage(ChatColor.AQUA + "Applied weakness to " + target.getName() + " for " + weaknessd + " seconds!");
+					return true;
+				}
+				
+				if (args[0].equalsIgnoreCase("freakout") || args[0].equalsIgnoreCase("scare") && auth == true && (player.hasPermission("PotionCommands.effect.scare") || player.isOp())) 
+				{
+					Player target = getServer().getPlayer(args[1]);
+					target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, scared * 20, 1000));
+					sender.sendMessage(ChatColor.AQUA + "Scared " + target.getName() + " for " + scared + " seconds!");
+					return true;
+				}
+				
+				if (args[0].equalsIgnoreCase("flicker") && auth == true && (player.hasPermission("PotionCommands.effect.flicker") || player.isOp())) 
+				{
+					Player target = getServer().getPlayer(args[1]);
+					target.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 15, 10));
+					return true;
+				}
 			}
-			
-			if (args[0].equalsIgnoreCase("effects") && (player.hasPermission("PotionCommands.effects") || player.isOp())) {
-				sender.sendMessage(ChatColor.AQUA + "Blindness, confusion, damage resistance, fast digging, fire resistance, harm, heal, hunger, jump, poison, regeneration, slowness, swiftness, strength, water breathing, weakness, freakout/scare, flicker");
-				return true;
-			}
-			if ((args[0].equalsIgnoreCase("b") || args[0].equalsIgnoreCase("blindness")) && auth == true && (player.hasPermission("PotionCommands.remove.blindness") || player.isOp())) {
-				Player target = Bukkit.getPlayer(args[1]);
-				target.removePotionEffect(PotionEffectType.BLINDNESS);
-				target.sendMessage("HI");
-				return true;
-			}
-			if ((args[0].equalsIgnoreCase("blind") || args[0].equalsIgnoreCase("blindness")) && auth == true && (player.hasPermission("PotionCommands.effect.blindness") || player.isOp())) {
-				Player target = getServer().getPlayer(args[1]);
-				target.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, blindnessd * 20, 1));
-				sender.sendMessage(ChatColor.AQUA + "Applied blindness to " + target.getName() + " for " + blindnessd + " seconds!");
-				return true;
-			}
-			if ((args[0].equalsIgnoreCase("confuse") || args[0].equalsIgnoreCase("confusion") || args[0].equalsIgnoreCase("nausea")) && auth == true && (player.hasPermission("PotionCommands.effect.confusion") || player.isOp())) {
-				Player target = getServer().getPlayer(args[1]);
-				target.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, confusiond * 20, 1));
-				sender.sendMessage(ChatColor.AQUA + "Applied confusion to " + target.getName() + " for " + confusiond + " seconds!");
-				return true;
-			}
-			if (args[0].equalsIgnoreCase("dmgresist") || args[0].equalsIgnoreCase("dr") && auth == true && (player.hasPermission("PotionCommands.effect.damageresistance") || player.isOp())) {
-				Player target = getServer().getPlayer(args[1]);
-				target.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, dmgresistd * 20, 1));
-				sender.sendMessage(ChatColor.AQUA + "Applied damage resistance to " + target.getName() + " for " + dmgresistd + " seconds!");
-				return true;
-			}
-			if (args[0].equalsIgnoreCase("fastdig") || args[0].equalsIgnoreCase("digspeed") || args[0].equalsIgnoreCase("dig") || args[0].equalsIgnoreCase("haste") && auth == true && (player.hasPermission("PotionCommands.effect.haste") || player.isOp())) {
-				Player target = getServer().getPlayer(args[1]);
-				target.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, fastdiggingd * 20, 1));
-				sender.sendMessage(ChatColor.AQUA + "Applied haste to " + target.getName() + " for " + fastdiggingd + " seconds!");
-				return true;
-			}
-			if (args[0].equalsIgnoreCase("fireresistance") || args[0].equalsIgnoreCase("fireresist") || args[0].equalsIgnoreCase("fr") && auth == true && (player.hasPermission("PotionCommands.effect.fireresistance") || player.isOp())) {
-				Player target = getServer().getPlayer(args[1]);
-				target.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, fireresistanced * 20, 1));
-				sender.sendMessage(ChatColor.AQUA + "Applied fire resistance to " + target.getName() + " for " + fireresistanced + " seconds!");
-				return true;
-			}	
-			if (args[0].equalsIgnoreCase("harm") || args[0].equalsIgnoreCase("harming") && auth == true && (player.hasPermission("PotionCommands.effect.harming") || player.isOp())) {
-				Player target = getServer().getPlayer(args[1]);
-				target.addPotionEffect(new PotionEffect(PotionEffectType.HARM, harmd * 20, 1));
-				sender.sendMessage(ChatColor.AQUA + "Applied harm to " + target.getName() + " for " + harmd + " seconds!");
-				return true;
-			}	
-			if (args[0].equalsIgnoreCase("heal") || args[0].equalsIgnoreCase("healing") && auth == true && (player.hasPermission("PotionCommands.effect.healing") || player.isOp())) {
-				Player target = getServer().getPlayer(args[1]);
-				target.addPotionEffect(new PotionEffect(PotionEffectType.HEAL, heald * 20, 1));
-				sender.sendMessage(ChatColor.AQUA + "Applied heal to " + target.getName() + " for " + heald + " seconds!");
-				return true;
-			}
-			if (args[0].equalsIgnoreCase("hunger") && auth == true && (player.hasPermission("PotionCommands.effect.hunger") || player.isOp())) {
-				Player target = getServer().getPlayer(args[1]);
-				target.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, hungerd * 20, 1));
-				sender.sendMessage(ChatColor.AQUA + "Applied hunger to " + target.getName() + " for " + hungerd + " seconds!");
-				return true;
-			}
-			if (args[0].equalsIgnoreCase("jump") || args[0].equalsIgnoreCase("highjump") || args[0].equalsIgnoreCase("jumpboost") && auth == true && (player.hasPermission("PotionCommands.effect.jumpboost") || player.isOp())) {
-				Player target = getServer().getPlayer(args[1]);
-				target.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, jumpd * 20, 1));
-				sender.sendMessage(ChatColor.AQUA + "Applied jump boost to " + target.getName() + " for " + jumpd + " seconds!");
-				return true;
-			}
-			if (args[0].equalsIgnoreCase("poison") && auth == true && (player.hasPermission("PotionCommands.effect.poison") || player.isOp())) {
-				Player target = getServer().getPlayer(args[1]);
-				target.addPotionEffect(new PotionEffect(PotionEffectType.POISON, poisond * 20, 1));
-				sender.sendMessage(ChatColor.AQUA + "Applied poison to " + target.getName() + " for " + poisond + " seconds!");
-				return true;
-			}
-			if (args[0].equalsIgnoreCase("regeneration") || args[0].equalsIgnoreCase("regen") && auth == true && (player.hasPermission("PotionCommands.effect.regeneration") || player.isOp())) {
-				Player target = getServer().getPlayer(args[1]);
-				target.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, regenerationd * 20, 1));
-				sender.sendMessage(ChatColor.AQUA + "Applied regeneration to " + target.getName() + " for " + regenerationd + " seconds!");
-				return true;
-			}
-			if (args[0].equalsIgnoreCase("slowness") || args[0].equalsIgnoreCase("slow") && auth == true && (player.hasPermission("PotionCommands.effect.slowness") || player.isOp())) {
-				Player target = getServer().getPlayer(args[1]);
-				target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, slowd * 20, 1));
-				sender.sendMessage(ChatColor.AQUA + "Applied slowness to " + target.getName() + " for " + slowd + " seconds!");
-				return true;
-			}
-			if (args[0].equalsIgnoreCase("speed") || args[0].equalsIgnoreCase("swiftness") || args[0].equalsIgnoreCase("swift") && auth == true && (player.hasPermission("PotionCommands.effect.swiftness") || player.isOp())) {
-				Player target = getServer().getPlayer(args[1]);
-				target.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, speedd * 20, 1));
-				sender.sendMessage(ChatColor.AQUA + "Applied swiftness to " + target.getName() + " for " + speedd + " seconds!");
-				return true;
-			}
-			if (args[0].equalsIgnoreCase("strength") || args[0].equalsIgnoreCase("strong") && auth == true && (player.hasPermission("PotionCommands.effect.strength") || player.isOp())) {
-				Player target = getServer().getPlayer(args[1]);
-				target.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, increasedmgd * 20, 1));
-				sender.sendMessage(ChatColor.AQUA + "Applied strength to " + target.getName() + " for " + increasedmgd + " seconds!");
-				return true;
-			}
-			if (args[0].equalsIgnoreCase("waterbreathing") || args[0].equalsIgnoreCase("breathing") || args[0].equalsIgnoreCase("wb") && auth == true && (player.hasPermission("PotionCommands.effect.waterbreathing") || player.isOp())) {
-				Player target = getServer().getPlayer(args[1]);
-				target.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, wbd * 20, 1));
-				sender.sendMessage(ChatColor.AQUA + "Applied water breathing to " + target.getName() + " for " + wbd + " seconds!");
-				return true;
-			}
-			if (args[0].equalsIgnoreCase("weakness") || args[0].equalsIgnoreCase("weak") && auth == true && (player.hasPermission("PotionCommands.effect.weakness") || player.isOp())) {
-				Player target = getServer().getPlayer(args[1]);
-				target.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, weaknessd * 20, 1));
-				sender.sendMessage(ChatColor.AQUA + "Applied weakness to " + target.getName() + " for " + weaknessd + " seconds!");
-				return true;
-			}
-			if (args[0].equalsIgnoreCase("freakout") || args[0].equalsIgnoreCase("scare") && auth == true && (player.hasPermission("PotionCommands.effect.scare") || player.isOp())) {
-				Player target = getServer().getPlayer(args[1]);
-				target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, scared * 20, 1000));
-				sender.sendMessage(ChatColor.AQUA + "Scared " + target.getName() + " for " + scared + " seconds!");
-				return true;
-			}
-			if (args[0].equalsIgnoreCase("flicker") && auth == true && (player.hasPermission("PotionCommands.effect.flicker") || player.isOp())) {
-				Player target = getServer().getPlayer(args[1]);
-				target.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 15, 10));
-				return true;
-			}
+		} 
+		else 
+		{
+			sender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
+			return true;
 		}
-	} else {
-		sender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
-		return true;
-	}
-	
-	return false;
+		
+		return false;
 	}
 }
