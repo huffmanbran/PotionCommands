@@ -29,6 +29,39 @@ public class PotionCommands extends JavaPlugin
 		getLogger().info("PotionCommands disabled");
 	}
 	
+	public void applyEffect(String playerName, String type, int duration, int amplifier)
+	{
+		
+		//Unimplemented improved command handler
+		PotionEffectType potion;
+		switch(type.toLowerCase())
+		{
+			case "blindness": case "blind": potion = PotionEffectType.BLINDNESS; break;
+			case "nausea": case "confuse": case "confusion": potion = PotionEffectType.CONFUSION; break;
+			case "dmgresist": case "dr": potion = PotionEffectType.DAMAGE_RESISTANCE; break;
+			case "haste": case "dig": case "fastdig": case "digspeed": potion = PotionEffectType.FAST_DIGGING; break;
+			case "fireresistance": case "fireresistance": case "fr": potion = PotionEffectType.FIRE_RESISTANCE; break;
+			case "harm": case "harming": case "hurt": potion = PotionEffectType.HARM; break;
+			case "heal": case "healing": case "health": potion = PotionEffectType.HEAL; break;
+			case "hunger": case "hungry": case "food": potion = PotionEffectType.HUNGER; break;
+			case "jump": case "highjump": case "jumpboost": potion = PotionEffectType.JUMP; break;
+		    case "poison": potion = PotionEffectType.POISON; break;
+		    case "regen": case "regenration": potion = PotionEffectType.REGENERATION; break;
+		    case "slow": case "slowness": potion = PotionEffectType.SLOW; break;
+		    case "speed": case "quick": case "swift": case "swiftness": potion = PotionEffectType.SPEED; break;
+		    case "waterbreathing": case "breathing": potion = PotionEffectType.WATER_BREATHING; break;
+			case "weak": case "weakness": potion = PotionEffectType.WEAKNESS; break;
+			case "scare": case "freakout": potion = PotionEffectType.SLOW; break;
+			case "flicker": case "dim": potion = PotionEffectType.BLINDNESS; break;
+			default: potion = null; break;
+		}
+		
+		if (potion != null)
+		{
+			
+		}
+	}
+	
 	@SuppressWarnings("unused")
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) 
 	{
@@ -95,7 +128,7 @@ public class PotionCommands extends JavaPlugin
 				}
 				catch (Exception e) 
 				{
-					player.sendMessage(ChatColor.RED + "Duration must be an integer!");
+					player.sendMessage(ChatColor.RED + "Duration must be an integer (in seconds)!");
 					return true;
 				}
 			}
