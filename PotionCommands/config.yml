@@ -1,0 +1,18 @@
+# These are the default durations of the effects (in seconds)
+blindness-duration: 5
+confusion-duration: 5
+damage-resistance-duration: 5
+fast-digging-duration: 5
+fire-resistance-duration: 5
+harming-duration: 5
+healing-duration: 5
+hunger-duration: 5
+jump-boost-duration: 5
+poison-duration: 5
+regeneration-duration: 5
+slowness-duration: 5
+swiftness-duration: 5
+strength-duration: 5
+water-breathing-duration: 5
+weakness-duration: 5
+freak-out-duration: 5
