@@ -29,40 +29,94 @@ public class PotionCommands extends JavaPlugin
 		getLogger().info("PotionCommands disabled");
 	}
 	
-	public void applyEffect(String playerName, String type, int duration, int amplifier)
+	public String applyEffect(String playerName, String type, int duration, int amplifier, CommandSender sender)
 	{
-		
+		String baseName = "null";
+		if (Bukkit.getPlayer(playerName) == null)
+		{
+			return ChatColor.RED + "Couldn't find player";
+		}
 		//Unimplemented improved command handler
+		
+		
+		int supply = duration;
+		
+		int blindnessd = getConfig().getInt("blindness-duration");
+		int confusiond = getConfig().getInt("confusion-duration");
+		int dmgresistd = getConfig().getInt("damage-resistance-duration");
+		int fastdiggingd = getConfig().getInt("fast-digging-duration");
+		int fireresistanced = getConfig().getInt("fire-resistance-duration");
+		int harmd = getConfig().getInt("harming-duration");
+		int heald = getConfig().getInt("healing-duration");
+		int hungerd = getConfig().getInt("hunger-duration");
+		int jumpd = getConfig().getInt("jump-boost-duration");
+		int poisond = getConfig().getInt("poison-duration");
+		int regenerationd = getConfig().getInt("regeneration-duration");
+		int slowd = getConfig().getInt("slowness-duration");
+		int speedd = getConfig().getInt("swiftness-duration");
+		int increasedmgd = getConfig().getInt("strength-duration");
+		int wbd = getConfig().getInt("water-breathing-duration");
+		int weaknessd = getConfig().getInt("weakness-duration");
+		int scared = getConfig().getInt("freak-out-duration");
+		int witherd = getConfig().getInt("wither-duration");
+		
+		
+		
 		PotionEffectType potion;
 		switch(type.toLowerCase())
 		{
-			case "blindness": case "blind": potion = PotionEffectType.BLINDNESS; break;
-			case "nausea": case "confuse": case "confusion": potion = PotionEffectType.CONFUSION; break;
-			case "dmgresist": case "dr": potion = PotionEffectType.DAMAGE_RESISTANCE; break;
-			case "haste": case "dig": case "fastdig": case "digspeed": potion = PotionEffectType.FAST_DIGGING; break;
-			case "fireresistance": case "fireresistance": case "fr": potion = PotionEffectType.FIRE_RESISTANCE; break;
-			case "harm": case "harming": case "hurt": potion = PotionEffectType.HARM; break;
-			case "heal": case "healing": case "health": potion = PotionEffectType.HEAL; break;
-			case "hunger": case "hungry": case "food": potion = PotionEffectType.HUNGER; break;
-			case "jump": case "highjump": case "jumpboost": potion = PotionEffectType.JUMP; break;
-		    case "poison": potion = PotionEffectType.POISON; break;
-		    case "regen": case "regenration": potion = PotionEffectType.REGENERATION; break;
-		    case "slow": case "slowness": potion = PotionEffectType.SLOW; break;
-		    case "speed": case "quick": case "swift": case "swiftness": potion = PotionEffectType.SPEED; break;
-		    case "waterbreathing": case "breathing": potion = PotionEffectType.WATER_BREATHING; break;
-			case "weak": case "weakness": potion = PotionEffectType.WEAKNESS; break;
-			case "scare": case "freakout": potion = PotionEffectType.SLOW; break;
-			case "flicker": case "dim": potion = PotionEffectType.BLINDNESS; break;
+			case "blindness": case "blind": potion = PotionEffectType.BLINDNESS; baseName = "blindness"; duration = blindnessd; break;
+			case "nausea": case "confuse": case "confusion": potion = PotionEffectType.CONFUSION; baseName = "confusion"; duration = confusiond; break;
+			case "dmgresist": case "dr": potion = PotionEffectType.DAMAGE_RESISTANCE; baseName = "damageresistance"; duration = dmgresistd; break;
+			case "haste": case "dig": case "fastdig": case "digspeed": potion = PotionEffectType.FAST_DIGGING; baseName = "haste"; duration = fastdiggingd; break;
+			case "fire": case "fireresistance": case "fr": potion = PotionEffectType.FIRE_RESISTANCE; baseName = "fireresistance"; duration = fireresistanced; break;
+			case "harm": case "harming": case "hurt": potion = PotionEffectType.HARM; baseName = "harming"; duration = harmd; break;
+			case "heal": case "healing": case "health": potion = PotionEffectType.HEAL; baseName = "healing"; duration = heald; break;
+			case "hunger": case "hungry": case "food": potion = PotionEffectType.HUNGER; baseName = "hunger"; duration = hungerd; break;
+			case "jump": case "highjump": case "jumpboost": potion = PotionEffectType.JUMP; baseName = "jumpboost"; duration = jumpd; break;
+		    case "poison": potion = PotionEffectType.POISON; baseName = "poison"; duration = poisond; break;
+		    case "regen": case "regenration": potion = PotionEffectType.REGENERATION; baseName = "regeneration"; duration = regenerationd; break;
+		    case "slow": case "slowness": potion = PotionEffectType.SLOW; baseName = "slowness"; duration = slowd; break;
+		    case "speed": case "quick": case "swift": case "swiftness": potion = PotionEffectType.SPEED; baseName = "swiftness"; duration = speedd; break;
+		    case "increaseddamage": case "damage": case "strong": case "strength": potion = PotionEffectType.INCREASE_DAMAGE; baseName = "strength"; duration = increasedmgd; break;
+		    case "waterbreathing": case "breathing": potion = PotionEffectType.WATER_BREATHING; baseName = "waterbreathing"; duration = wbd; break;
+			case "weak": case "weakness": potion = PotionEffectType.WEAKNESS; baseName = "weakness"; duration = weaknessd; break;
+			case "scare": case "freakout": potion = PotionEffectType.SLOW; amplifier = 1000; baseName = "scare"; duration = scared; break;
+			case "flicker": case "dim": potion = PotionEffectType.BLINDNESS; duration = 15; amplifier = 10; baseName = "flicker"; break;
+			case "wither": case "witherboss": potion = null; baseName = "wither"; duration = witherd; break; //TODO: 1.4
 			default: potion = null; break;
 		}
 		
 		if (potion != null)
 		{
+			String perm = "PotionCommands.effect." + baseName; //Guaranteed to be initialised
+			if (sender.getName() == getServer().getPlayer(playerName).getName())
+			{
+				perm = perm + ".self";
+			}
+			else
+			{
+				perm = perm + ".other";
+			}
 			
+			if (!sender.hasPermission(perm))
+			{
+				return ChatColor.RED + "You need permission: " + perm;
+			}
+			Player target = getServer().getPlayer(playerName);
+			if (supply != -1)
+			{
+				duration = supply; //-1 = use config
+			}
+			target.addPotionEffect(new PotionEffect(potion, duration, amplifier));
+			return ChatColor.GREEN + "Potion applied successfully";
+		}
+		else
+		{
+			return ChatColor.RED + "Couldn't handle your request. Invalid potion";
 		}
 	}
 	
-	@SuppressWarnings("unused")
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) 
 	{
 		int blindnessd = getConfig().getInt("blindness-duration");
@@ -82,6 +136,7 @@ public class PotionCommands extends JavaPlugin
 		int wbd = getConfig().getInt("water-breathing-duration");
 		int weaknessd = getConfig().getInt("weakness-duration");
 		int scared = getConfig().getInt("freak-out-duration");
+		int utilised = 20;
 		Boolean auth = false;
 		
 		if (sender.hasPermission("PotionCommands.use") || sender.isOp()) 
