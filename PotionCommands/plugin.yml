@@ -8,3 +8,6 @@ commands:
     rpotion:
       description: Removes effect from player
       usage: /<command> <effect> <player>
+    particle:
+      description: Adds defined potion particles to player
+      usage: /<command> <player> <hexcolor> <duration ticks>

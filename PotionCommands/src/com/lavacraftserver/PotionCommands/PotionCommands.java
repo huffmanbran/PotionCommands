@@ -1,9 +1,14 @@
 package com.lavacraftserver.PotionCommands;
 
+import net.minecraft.server.DataWatcher;
+import org.bukkit.craftbukkit.entity.CraftLivingEntity;
+import net.minecraft.server.EntityLiving;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
@@ -117,6 +122,28 @@ public class PotionCommands extends JavaPlugin
 		}
 	}
 	
+	
+	public void addPotionGraphicalEffect(LivingEntity entity, int color, int duration)
+	{
+		final EntityLiving el = ((CraftLivingEntity) entity).getHandle();
+		final DataWatcher dw = el.getDataWatcher();
+		dw.watch(8, Integer.valueOf(color));
+
+		Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable()
+		{
+			public void run()
+			{
+				int c = 0;
+				if (!el.effects.isEmpty())
+				{
+					c = net.minecraft.server.PotionBrewer.a(el.effects.values());
+				}
+				dw.watch(8, Integer.valueOf(c));
+			}
+		}, duration);
+	}
+		 
+	
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) 
 	{
 		int blindnessd = getConfig().getInt("blindness-duration");
@@ -142,6 +169,13 @@ public class PotionCommands extends JavaPlugin
 		if (sender.hasPermission("PotionCommands.use") || sender.isOp()) 
 		{
 			auth = true;				
+		}
+		
+		if (commandLabel.equalsIgnoreCase("particle") && sender instanceof Player) 
+		{
+			Player p = (Player) sender;
+			LivingEntity e = p;
+			addPotionGraphicalEffect(e, 0x0000FF, 100); //Will eventually get data from command
 		}
 		
 		if (commandLabel.equalsIgnoreCase("potion")) 
