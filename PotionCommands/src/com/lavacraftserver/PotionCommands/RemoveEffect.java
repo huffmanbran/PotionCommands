@@ -30,17 +30,15 @@ public class RemoveEffect implements CommandExecutor
 				
 				
 			
-		if (commandLabel.equalsIgnoreCase("removepotion")) 
+		if (commandLabel.equalsIgnoreCase("rpotion")) 
 		{
-			if (!(sender instanceof Player)) 
+			/*if (!(sender instanceof Player)) 
 			{
 				sender.sendMessage("[PotionEffects] Sorry, this command can only be run by a player!");
 				return true;
-			}
+			}*/
 				
-				 
-			else //:
-			{
+		
 				final Player player = (Player) sender;
 				
 				
@@ -191,12 +189,13 @@ public class RemoveEffect implements CommandExecutor
 				
 				
 				
-
-		
 			}
+		
+			
 				
 				
-		}
+		
+	
 				
 				
 		return true;

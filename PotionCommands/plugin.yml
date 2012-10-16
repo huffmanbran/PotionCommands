@@ -5,6 +5,9 @@ commands:
     potion:
       description: Applies a potion effect to the given player.
       usage: /<command> <effect> <player> [duration]
+    potionf:
+      description: Advanced users. Allows more customisation
+      usage: /<command> [flag] [flag] [flag] ...
     rpotion:
       description: Removes effect from player
       usage: /<command> <effect> <player>

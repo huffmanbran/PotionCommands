@@ -70,6 +70,7 @@ public class PotionCommands extends JavaPlugin
 		PotionEffectType potion;
 		switch(type.toLowerCase())
 		{
+		
 			case "blindness": case "blind": potion = PotionEffectType.BLINDNESS; baseName = "blindness"; duration = blindnessd; break;
 			case "nausea": case "confuse": case "confusion": potion = PotionEffectType.CONFUSION; baseName = "confusion"; duration = confusiond; break;
 			case "dmgresist": case "dr": potion = PotionEffectType.DAMAGE_RESISTANCE; baseName = "damageresistance"; duration = dmgresistd; break;
@@ -118,6 +119,7 @@ public class PotionCommands extends JavaPlugin
 		}
 		else
 		{
+			
 			return ChatColor.RED + "Couldn't handle your request. Invalid potion";
 		}
 	}
@@ -171,11 +173,55 @@ public class PotionCommands extends JavaPlugin
 			auth = true;				
 		}
 		
-		if (commandLabel.equalsIgnoreCase("particle") && sender instanceof Player) 
+		if (commandLabel.equalsIgnoreCase("particle")) 
 		{
-			Player p = (Player) sender;
-			LivingEntity e = p;
-			addPotionGraphicalEffect(e, 0x0000FF, 100); //Will eventually get data from command
+			
+			if (!sender.hasPermission("PotionCommands.particle"))
+			{
+				sender.sendMessage(ChatColor.RED + "You don't have permission to use this command.");
+				return true;
+			}
+			int d = 0;
+		try
+		{
+			if (args.length == 2 && sender instanceof Player)
+			{
+				Player p = (Player) sender;
+				int i = Integer.parseInt(args[0].replace("#", ""), 16);  
+				d = Integer.parseInt(args[1]);
+				LivingEntity e = p;
+				addPotionGraphicalEffect(e, i, d); 
+				return true;
+			}
+			if (args.length == 3)
+			{
+				
+				Player p = Bukkit.getPlayer(args[0]);
+				int i = Integer.parseInt(args[1].replace("#", ""), 16);  
+				d = Integer.parseInt(args[2]);
+				LivingEntity e = p;
+				addPotionGraphicalEffect(e, i, d); 
+				return true;
+			}
+		}
+		catch (Exception e)
+		{
+			if (d > 0)
+			{
+				sender.sendMessage(ChatColor.RED + "Bad syntax or unknown player or bad sender");
+			}
+			else
+			{
+				sender.sendMessage(ChatColor.GREEN + "Infinite particle effect activated");
+				return true;
+			}
+			return false;
+			
+			
+			
+		}
+			return false;
+			
 		}
 		
 		if (commandLabel.equalsIgnoreCase("potion")) 
