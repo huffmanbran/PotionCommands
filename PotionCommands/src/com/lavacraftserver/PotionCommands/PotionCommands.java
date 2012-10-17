@@ -26,6 +26,12 @@ public class PotionCommands extends JavaPlugin
 		getConfig().options().copyDefaults(true);
 		saveConfig();
 		getCommand("rpotion").setExecutor(new RemoveEffect(this));
+		if (getConfig().getBoolean("auto-update"))
+		{
+			Updater updater = new Updater(this, "potioncommands", this.getFile(), Updater.UpdateType.DEFAULT, false);
+			getLogger().info("You've opted in to updates for PotionCommands.");
+			getLogger().info("To disable, see config file");
+		}
 	}
 
 	@Override
