@@ -120,6 +120,7 @@ public class PotionCommands extends JavaPlugin
 			{
 				duration = supply; //-1 = use config
 			}
+			target.removePotionEffect(potion);
 			target.addPotionEffect(new PotionEffect(potion, duration, amplifier));
 			return ChatColor.GREEN + "Potion applied successfully";
 		}
@@ -234,45 +235,10 @@ public class PotionCommands extends JavaPlugin
 		{
 			
 			final CommandSender player = sender;
-			if (!(auth == true)) 
-			{
-				sender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
-				return true;
-			}
-			if (args.length != 3 && args.length != 2 && auth == true) 
-			{
-				sender.sendMessage(ChatColor.RED + "Bad syntax: /potion <effect> <player> [duration]");
-				return true;
-			}
+			auth = true;
+
 			
 	
-			if (args.length == 3 && auth == true) 
-			{
-				try 
-				{
-					blindnessd = Integer.parseInt(args[2]);
-					confusiond = Integer.parseInt(args[2]);
-					dmgresistd = Integer.parseInt(args[2]);
-					fastdiggingd = Integer.parseInt(args[2]);
-					fireresistanced = Integer.parseInt(args[2]);
-					harmd = Integer.parseInt(args[2]);
-					heald = Integer.parseInt(args[2]);
-					hungerd = Integer.parseInt(args[2]);
-					jumpd = Integer.parseInt(args[2]);
-					poisond = Integer.parseInt(args[2]);
-					regenerationd = Integer.parseInt(args[2]);
-					slowd = Integer.parseInt(args[2]);
-					speedd = Integer.parseInt(args[2]);
-					increasedmgd = Integer.parseInt(args[2]);
-					wbd = Integer.parseInt(args[2]);
-					scared = Integer.parseInt(args[2]);
-				}
-				catch (Exception e) 
-				{
-					player.sendMessage(ChatColor.RED + "Duration must be an integer (in seconds)!");
-					return true;
-				}
-			}
 
 			//TODO: Restructure commands into one place (too much repetition for my likings :D)
 			if (args[0].equalsIgnoreCase("effects") && (player.hasPermission("PotionCommands.effects") || player.isOp())) 
@@ -280,12 +246,91 @@ public class PotionCommands extends JavaPlugin
 				sender.sendMessage(ChatColor.AQUA + "Blindness, confusion, damage resistance, fast digging, fire resistance, harm, heal, hunger, jump, poison, regeneration, slowness, swiftness, strength, water breathing, weakness, freakout/scare, flicker");
 				return true;
 			}
-
-			if ((args[0].equalsIgnoreCase("blind") || args[0].equalsIgnoreCase("blindness")) && auth == true && (player.hasPermission("PotionCommands.effect.blindness") || player.isOp())) 
+			
+			//Flexible command check
+			if (args.length > 0 && Bukkit.getPlayer(args[0]) == null) //NPEs are evil
+			{
+				//We're assuming they've chosen an effect as the first arg
+				//Yes this method sucks. See /potionf
+				if (args.length == 1)
+				{
+					//They've only given us an effect
+					//Fine, we'll supply in duration + amplifier to be defaults.
+					if (sender instanceof Player)
+						sender.sendMessage(this.applyEffect(sender.getName(), args[0], -1, 1, sender));
+					else
+						sender.sendMessage(ChatColor.RED + "Unsupported command sender -- supply a player"); //Damn console
+				}
+				
+				if (args.length == 2)
+				{
+					//They've only given us an effect and duration (from my POV)
+					//Fine, we'll supply in amplifier to be default.
+					if (sender instanceof Player)
+						sender.sendMessage(this.applyEffect(sender.getName(), args[0], Integer.parseInt(args[1]), 1, sender));
+					else
+						sender.sendMessage(ChatColor.RED + "Unsupported command sender -- supply a player"); //Damn console
+				}
+				
+				if (args.length == 3)
+				{
+					//Wow! They've been generous and given us the amplifier
+					//Awesome stuff here in PotionCommands.java!!
+					if (sender instanceof Player)
+						sender.sendMessage(this.applyEffect(sender.getName(), args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), sender));
+					else
+						sender.sendMessage(ChatColor.RED + "Unsupported command sender -- supply a player"); //Damn console -- once again :(
+				}
+				
+			}
+			else
+			{
+				Player target = Bukkit.getPlayer(args[0]);
+				if (args.length == 1)
+				{
+					//They've only given us a player
+					//What the hell are we supposed to do with a player?
+					//My assumption is that Bukkit has melted and returned us a player from the effect supplied
+					//In this case, we'll duplicate the functionality above (applying the effect to the sender)
+					if (sender instanceof Player)
+						sender.sendMessage(this.applyEffect(sender.getName(), args[0], -1, 1, sender));
+					else
+						sender.sendMessage(ChatColor.RED + "Unsupported command sender -- supply a player"); //Damn console
+				}
+				
+				if (args.length == 2)
+				{
+					//They've only given us an player and an effect
+					//Fine, we'll supply in the amplifier and duration to be default.
+					
+					sender.sendMessage(this.applyEffect(target.getName(), args[1], -1, 1, sender));
+					
+				}
+				
+				if (args.length == 3)
+				{
+					//We've got a duration! Woot!!
+					sender.sendMessage(this.applyEffect(target.getName(), args[1], Integer.parseInt(args[2]), 1, sender));
+					
+				}
+				
+				if (args.length == 4)
+				{
+					//This player deserves some cake. They've given us everything!
+					sender.sendMessage(this.applyEffect(target.getName(), args[1], Integer.parseInt(args[2]), Integer.parseInt(args[3]), sender));
+					
+				}
+				
+				
+			}
+			//Commenting this out in case the stuff above has broken everything. That would be a real shame...
+			/*
+			if ((args[0].equalsIgnoreCase("blind") || args[0].equalsIgnoreCase("blindness"))) 
 			{
 				Player target = getServer().getPlayer(args[1]);
-				target.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, blindnessd * 20, 1));
-				sender.sendMessage(ChatColor.AQUA + "Applied blindness to " + target.getName() + " for " + blindnessd + " seconds!");
+				//target.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, blindnessd * 20, 1));
+				//sender.sendMessage(ChatColor.AQUA + "Applied blindness to " + target.getName() + " for " + blindnessd + " seconds!");
+				sender.sendMessage(applyEffect(target.getName(), args[0], -1, 100, sender));
 				return true;
 			}
 
@@ -422,13 +467,11 @@ public class PotionCommands extends JavaPlugin
 				Player target = getServer().getPlayer(args[1]);
 				target.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 15, 10));
 				return true;
-			}
+			} */
+			
+			//Bang and the code is gone...
 		} 
-		else 
-		{
-			sender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
-			return true;
-		}
+		
 		
 		return false;
 	}

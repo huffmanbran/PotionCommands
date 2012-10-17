@@ -46,7 +46,7 @@ public class RemoveEffect implements CommandExecutor
 				
 				if (!(auth == true)) 
 				{
-					sender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
+					sender.sendMessage(ChatColor.RED + "You do not have permission to use this command!");
 					return true;
 				}
 				
