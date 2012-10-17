@@ -247,6 +247,8 @@ public class PotionCommands extends JavaPlugin
 				return true;
 			}
 			
+		try
+		{
 			//Flexible command check
 			if (args.length > 0 && Bukkit.getPlayer(args[0]) == null) //NPEs are evil
 			{
@@ -260,6 +262,7 @@ public class PotionCommands extends JavaPlugin
 						sender.sendMessage(this.applyEffect(sender.getName(), args[0], -1, 1, sender));
 					else
 						sender.sendMessage(ChatColor.RED + "Unsupported command sender -- supply a player"); //Damn console
+					
 				}
 				
 				if (args.length == 2)
@@ -281,6 +284,7 @@ public class PotionCommands extends JavaPlugin
 					else
 						sender.sendMessage(ChatColor.RED + "Unsupported command sender -- supply a player"); //Damn console -- once again :(
 				}
+				return true;
 				
 			}
 			else
@@ -320,9 +324,20 @@ public class PotionCommands extends JavaPlugin
 					sender.sendMessage(this.applyEffect(target.getName(), args[1], Integer.parseInt(args[2]), Integer.parseInt(args[3]), sender));
 					
 				}
-				
+				return true;
 				
 			}
+		}
+		catch (Exception e)
+		{
+			sender.sendMessage(ChatColor.RED + "Aw snap! We had a bit of an issue.");
+			sender.sendMessage(ChatColor.GREEN + "Details are in the console. Brighten our day with a bug report!");
+			
+			getLogger().severe(e.toString());
+			return true;
+
+		}
+			
 			//Commenting this out in case the stuff above has broken everything. That would be a real shame...
 			/*
 			if ((args[0].equalsIgnoreCase("blind") || args[0].equalsIgnoreCase("blindness"))) 
