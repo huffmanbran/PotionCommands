@@ -214,7 +214,11 @@ public class PotionCommands extends JavaPlugin
 
 			
 	
-
+			if (args.length == 0)
+			{
+				sender.sendMessage(ChatColor.RED + "Usage: /potion <effects> or /potion [user] <effect> [duration] [amplifier]");
+				return false;
+			}
 			//TODO: Restructure commands into one place (too much repetition for my likings :D)
 			if (args[0].equalsIgnoreCase("effects") && (player.hasPermission("PotionCommands.effects") || player.isOp())) 
 			{
@@ -226,6 +230,7 @@ public class PotionCommands extends JavaPlugin
 		{
 			//Flexible command check
 			//I was probably drunk when writing these comments :\
+		
 			if (args.length > 0 && Bukkit.getPlayer(args[0]) == null) //NPEs are evil
 			{
 				//We're assuming they've chosen an effect as the first arg

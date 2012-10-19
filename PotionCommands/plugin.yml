@@ -1,16 +1,16 @@
 name: PotionCommands
 main: com.lavacraftserver.PotionCommands.PotionCommands
-version: 1.2
+version: 1.2.1
 commands:
     potion:
       description: Applies a potion effect to the given player.
-      usage: /<command> <effect> <player> [duration]
+      usage: Consult documentation for more usage info
     potionf:
       description: Advanced users. Allows more customisation
       usage: /<command> [flag] [flag] [flag] ...
     rpotion:
       description: Removes effect from player
-      usage: /<command> <effect> <player>
+      usage: /rpotion <effect> [player]
     particle:
       description: Adds defined potion particles to player
       usage: /<command> <player> <hexcolor> <duration ticks>
