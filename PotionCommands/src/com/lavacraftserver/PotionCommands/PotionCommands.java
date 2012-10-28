@@ -69,8 +69,8 @@ public class PotionCommands extends JavaPlugin
 		int weaknessd = getConfig().getInt("weakness-duration");
 		int scared = getConfig().getInt("freak-out-duration");
 		int witherd = getConfig().getInt("wither-duration");
-		
-		
+		int nvd = getConfig().getInt("nv-duration");
+		int invd = getConfig().getInt("invisibility-duration");
 		
 		PotionEffectType potion;
 		switch(type.toLowerCase())
@@ -95,6 +95,8 @@ public class PotionCommands extends JavaPlugin
 			case "scare": case "freakout": potion = PotionEffectType.SLOW; amplifier = 1000; baseName = "scare"; duration = scared; break;
 			case "flicker": case "dim": potion = PotionEffectType.BLINDNESS; duration = 15; amplifier = 10; baseName = "flicker"; break;
 			case "wither": case "witherboss": potion = null; baseName = "wither"; duration = witherd; break; //TODO: 1.4
+			case "invisible": case "invisibility": potion = PotionEffectType.INVISIBILITY; baseName = "wither"; duration = invd; break; //TODO: 1.4
+			case "nightvision": case "nv": potion = PotionEffectType.NIGHT_VISION; baseName = "nightvision"; duration = nvd; break; //TODO: 1.4
 			default: potion = null; break;
 		}
 		
