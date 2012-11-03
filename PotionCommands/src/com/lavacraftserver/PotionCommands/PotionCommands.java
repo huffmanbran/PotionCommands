@@ -94,7 +94,7 @@ public class PotionCommands extends JavaPlugin
 			case "weak": case "weakness": potion = PotionEffectType.WEAKNESS; baseName = "weakness"; duration = weaknessd; break;
 			case "scare": case "freakout": potion = PotionEffectType.SLOW; amplifier = 1000; baseName = "scare"; duration = scared; break;
 			case "flicker": case "dim": potion = PotionEffectType.BLINDNESS; duration = 15; amplifier = 10; baseName = "flicker"; break;
-			case "wither": case "witherboss": potion = null; baseName = "wither"; duration = witherd; break; //TODO: 1.4
+			case "wither": case "witherboss": potion = PotionEffectType.WITHER; baseName = "wither"; duration = witherd; break; //TODO: 1.4
 			case "invisible": case "invisibility": potion = PotionEffectType.INVISIBILITY; baseName = "wither"; duration = invd; break; //TODO: 1.4
 			case "nightvision": case "nv": potion = PotionEffectType.NIGHT_VISION; baseName = "nightvision"; duration = nvd; break; //TODO: 1.4
 			default: potion = null; break;
