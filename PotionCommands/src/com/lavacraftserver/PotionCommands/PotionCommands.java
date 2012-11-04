@@ -49,16 +49,6 @@ public class PotionCommands extends JavaPlugin implements Listener
 		getLogger().info("PotionCommands disabled");
 	}
 
-	@EventHandler
-    public void onInteract(PlayerInteractEvent e)
-	{
-	    Player p = e.getPlayer();
-	    if(p.getInventory().getItemInHand().getType().equals(Material.POTION) && p.getItemInHand().getDurability() == 2)
-	    {
-	    	p.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 1337, 1));
-	    	p.getInventory().remove(p.getItemInHand());
-	    }
-	}
 
 	public String applyEffect(String playerName, String type, int duration, int amplifier, CommandSender sender)
 	{
@@ -295,9 +285,162 @@ public class PotionCommands extends JavaPlugin implements Listener
 
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args)
 	{
-		if (commandLabel.equalsIgnoreCase("potionf"))
+		if (commandLabel.equalsIgnoreCase("potionf") && sender instanceof Player && sender.hasPermission("PotionCommands.potionf"))
 		{
+			if (args.length == 0)
+			{
+				Player p = (Player) sender;
+				p.getInventory().addItem(new ItemStack(Material.POTION, 1));
+				return false;
+				
+			}
 			
+			if (args.length == 3)
+			{
+				Player p = (Player) sender;
+				if (p.getItemInHand() == null || p.getItemInHand().getType() != Material.POTION)
+				{
+					sender.sendMessage(ChatColor.RED + "You must hold the potion");
+				}
+				else
+				{
+					PotionEffectType potion = null;
+					String baseName;
+					String type = args[0];
+					int duration = 0;
+					int amplifier = 0;
+					switch (type.toLowerCase())
+					{
+
+					case "blindness":
+					case "blind":
+						potion = PotionEffectType.BLINDNESS;
+						baseName = "blindness";
+						break;
+					case "nausea":
+					case "confuse":
+					case "confusion":
+						potion = PotionEffectType.CONFUSION;
+						baseName = "confusion";
+						break;
+					case "dmgresist":
+					case "dr":
+						potion = PotionEffectType.DAMAGE_RESISTANCE;
+						baseName = "damageresistance";
+						break;
+					case "haste":
+					case "dig":
+					case "fastdig":
+					case "digspeed":
+						potion = PotionEffectType.FAST_DIGGING;
+						baseName = "haste";
+						break;
+					case "fire":
+					case "fireresistance":
+					case "fr":
+						potion = PotionEffectType.FIRE_RESISTANCE;
+						baseName = "fireresistance";
+						break;
+					case "harm":
+					case "harming":
+					case "hurt":
+						potion = PotionEffectType.HARM;
+						baseName = "harming";
+						break;
+					case "heal":
+					case "healing":
+					case "health":
+						potion = PotionEffectType.HEAL;
+						baseName = "healing";
+						break;
+					case "hunger":
+					case "hungry":
+					case "food":
+						potion = PotionEffectType.HUNGER;
+						baseName = "hunger";
+
+						break;
+					case "jump":
+					case "highjump":
+					case "jumpboost":
+						potion = PotionEffectType.JUMP;
+						baseName = "jumpboost";
+						break;
+					case "poison":
+						potion = PotionEffectType.POISON;
+						baseName = "poison";
+						break;
+					case "regen":
+					case "regenration":
+						potion = PotionEffectType.REGENERATION;
+						baseName = "regeneration";
+						break;
+					case "slow":
+					case "slowness":
+						potion = PotionEffectType.SLOW;
+						baseName = "slowness";
+						break;
+					case "speed":
+					case "quick":
+					case "swift":
+					case "swiftness":
+						potion = PotionEffectType.SPEED;
+						baseName = "swiftness";
+						break;
+					case "increaseddamage":
+					case "damage":
+					case "strong":
+					case "strength":
+						potion = PotionEffectType.INCREASE_DAMAGE;
+						baseName = "strength";
+						break;
+					case "waterbreathing":
+					case "breathing":
+						potion = PotionEffectType.WATER_BREATHING;
+						baseName = "waterbreathing";
+						break;
+					case "weak":
+					case "weakness":
+						potion = PotionEffectType.WEAKNESS;
+						baseName = "weakness";
+						break;
+					case "scare":
+					case "freakout":
+						potion = PotionEffectType.SLOW;
+						amplifier = 1000;
+						baseName = "scare";
+						break;
+					case "flicker":
+					case "dim":
+						potion = PotionEffectType.BLINDNESS;
+						duration = 15;
+						amplifier = 10;
+						baseName = "flicker";
+						break;
+					case "wither":
+					case "witherboss":
+						potion = PotionEffectType.WITHER;
+						baseName = "wither";
+						break; // TODO: 1.4
+					case "invisible":
+					case "invisibility":
+						potion = PotionEffectType.INVISIBILITY;
+						baseName = "invisibility";
+						break; // TODO: 1.4
+					case "nightvision":
+					case "nv":
+						potion = PotionEffectType.NIGHT_VISION;
+						baseName = "nightvision";
+						break; // TODO: 1.4
+					}
+					amplifier = Integer.parseInt(args[1]);
+					duration = Integer.parseInt(args[2]);
+					
+					p.setItemInHand(CustomPotions.addCustomEffect(p.getItemInHand(), potion, amplifier, duration));
+					return true;
+				}
+				
+			}
 		}
 
 		if (commandLabel.equalsIgnoreCase("particle"))
