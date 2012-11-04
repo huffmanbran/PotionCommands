@@ -1,4 +1,4 @@
-# These are the default durations of the effects (in seconds)
+# These are the default durations of the effects (in ticks)
 blindness-duration: 5
 confusion-duration: 5
 damage-resistance-duration: 5
@@ -16,5 +16,7 @@ strength-duration: 5
 water-breathing-duration: 5
 weakness-duration: 5
 freak-out-duration: 5
+invisibility-duration: 5
+nv-duration: 5
 wither-duration: 5
 auto-update: true
