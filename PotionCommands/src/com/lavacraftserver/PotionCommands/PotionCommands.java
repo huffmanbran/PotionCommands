@@ -254,7 +254,8 @@ public class PotionCommands extends JavaPlugin implements Listener
 			}
 			target.removePotionEffect(potion);
 			target.addPotionEffect(new PotionEffect(potion, duration, amplifier));
-			return ChatColor.GREEN + "Potion applied successfully";
+			return ChatColor.GREEN + "";
+			/*No effect message needed.*/
 		}
 		else
 		{
